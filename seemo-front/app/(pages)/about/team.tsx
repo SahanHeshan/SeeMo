@@ -5,14 +5,14 @@ const members = [
     avatar: "https://avatars.githubusercontent.com/u/113684070?v=4",
   },
   {
-    name: "",
+    name: "Anjula Handapangoda",
     role: "CS Undergraduate",
-    avatar: "",
+    avatar: "https://avatars.githubusercontent.com/u/118917346?v=4",
   },
   {
-    name: "",
+    name: "Ransika Dewmini",
     role: "CS Undergraduate",
-    avatar: "",
+    avatar: "https://avatars.githubusercontent.com/u/113702461?v=4",
   },
   {
     name: "Matheesha Jananjaya",
@@ -20,9 +20,9 @@ const members = [
     avatar: "https://avatars.githubusercontent.com/u/184282971?v=4",
   },
   {
-    name: "",
+    name: "Achintha Sewmina",
     role: "CS Undergraduate",
-    avatar: "",
+    avatar: "https://avatars.githubusercontent.com/u/179390615?v=4",
   },
 ];
 
