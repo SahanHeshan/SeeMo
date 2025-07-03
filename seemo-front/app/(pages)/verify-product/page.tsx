@@ -31,7 +31,7 @@ const transitionVariants = {
 
 export default function VerifyProduct() {
   return (
-    <section className="py-24 md:py-10">
+    <section className="py-24 md:py-4">
       <AnimatedGroup
         variants={{
           container: {
