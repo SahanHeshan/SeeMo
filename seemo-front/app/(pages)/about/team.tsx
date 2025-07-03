@@ -15,9 +15,9 @@ const members = [
     avatar: "",
   },
   {
-    name: "",
+    name: "Matheesha Jananjaya",
     role: "CS Undergraduate",
-    avatar: "",
+    avatar: "https://avatars.githubusercontent.com/u/184282971?v=4",
   },
   {
     name: "",

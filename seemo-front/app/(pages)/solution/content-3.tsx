@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function ContentSection1() {
+export default function ContentSection3() {
   return (
     <section className="py-16 md:py-32">
       <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">
@@ -11,7 +11,7 @@ export default function ContentSection1() {
           <div className="relative mb-6 sm:mb-0">
             <div className="bg-linear-to-b aspect-76/59 relative rounded-2xl from-zinc-300 to-transparent p-px dark:from-zinc-700">
               <Image
-                src="/file.svg"
+                src="/payments.png"
                 className="hidden rounded-[15px] dark:block"
                 alt="payments illustration dark"
                 width={1207}
