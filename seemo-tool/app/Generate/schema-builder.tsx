@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 type FieldType = "string" | "number" | "boolean";
 
@@ -72,12 +73,17 @@ export default function SchemaBuilder({
               checked={col.include}
               onCheckedChange={(val) => updateColumn(i, { include: val })}
             />
+            <Separator
+              orientation="vertical"
+              className="mx-2 data-[orientation=vertical]:h-4"
+            />
             <Label className="flex items-center space-x-1">
               <input
                 type="radio"
                 name="primaryKey"
                 checked={col.isPrimaryKey}
                 onChange={() => handlePrimaryKeyChange(i)}
+                className="accent-primary"
               />
               <span className="text-sm">Unique Id</span>
             </Label>
