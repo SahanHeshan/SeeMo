@@ -174,6 +174,7 @@ export default function DataTable() {
 
                   const txHash: string = await res.json(); // Single tx hash returned
                   const hashesWithTx = hashes.map((item) => ({
+
                     ...item,
                     txHash,
                   }));
