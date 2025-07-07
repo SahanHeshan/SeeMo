@@ -1,4 +1,3 @@
-// data-table.tsx
 "use client";
 
 import * as React from "react";
@@ -6,7 +5,7 @@ import SchemaBuilder from "@/app/Generate/schema-builder";
 import CSVUpload from "@/app/Generate/csvInput";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { downloadQRCodesFromRefs } from "@/lib/downloadQR";
 import { useRef } from "react";
 
@@ -23,12 +22,8 @@ type ColumnPreview = {
   isPrimaryKey: boolean;
 };
 
-function getPrimaryKeyName(columns: ColumnPreview[]) {
-  return columns.find((c) => c.isPrimaryKey)?.name;
-}
-
-function getRowForQR(row: any, columns: ColumnPreview[], pk: string) {
-  const visibleCols = columns.filter((c) => c.include && !c.isPrimaryKey);
+function getRowForQR(row: any, columns: ColumnPreview[]) {
+  const visibleCols = columns.filter((c) => c.include);
   return Object.fromEntries(visibleCols.map((c) => [c.name, row[c.name]]));
 }
 
@@ -47,14 +42,13 @@ export default function DataTable() {
   const qrRefs = useRef<(SVGSVGElement | null)[]>([]);
   const [columns, setColumns] = React.useState<ColumnPreview[]>([]);
   const [previewData, setPreviewData] = React.useState<any[]>([]);
-  const [schema, setSchema] = React.useState<z.ZodObject<any>>();
-  const [data, setData] = React.useState<any[]>([]);
-  const [hashes, setHashes] = React.useState<any[]>([]);
+  const [schema, setSchema] = React.useState<z.ZodObject<any>>(); // For schema validation
+  const [data, setData] = React.useState<any[]>([]); // Validated rows
+  const [hashes, setHashes] = React.useState<
+    { row: any; hash: string; txHash?: string }[]
+  >([]);
 
   const handleSchemaConfirm = () => {
-    const pk = getPrimaryKeyName(columns);
-    if (!pk) return alert("Please select a primary key.");
-
     const shape: Record<string, any> = {};
     for (const col of columns) {
       if (!col.include) continue;
@@ -88,11 +82,11 @@ export default function DataTable() {
         <TabsList className="w-full justify-between">
           <TabsTrigger value="load">1. Load Data</TabsTrigger>
           <TabsTrigger value="send">2. Process Data</TabsTrigger>
-          <TabsTrigger value="get">3. Submmit</TabsTrigger>
+          <TabsTrigger value="get">3. Submit</TabsTrigger>
         </TabsList>
       </div>
 
-      {/* Load Data */}
+      {/* Load CSV */}
       <TabsContent value="load" className="flex flex-col gap-4 px-4 lg:px-6">
         <div className="aspect-video w-full flex-1 rounded-lg border border-dashed p-4 space-y-4">
           <CSVUpload
@@ -100,7 +94,7 @@ export default function DataTable() {
               setColumns(
                 cols.map((col) => ({
                   ...col,
-                  isPrimaryKey: col.isPrimaryKey ?? false,
+                  isPrimaryKey: false, // Irrelevant now
                 }))
               );
               setPreviewData(rows);
@@ -126,29 +120,18 @@ export default function DataTable() {
         </div>
       </TabsContent>
 
-      {/* Gen Hash */}
+      {/* Generate Hashes */}
       <TabsContent value="send" className="flex flex-col px-4 lg:px-6">
         <div className="aspect-video w-full flex-1 rounded-lg border border-dashed p-4 space-y-4">
           <div className="flex gap-2">
             <Button
               onClick={async () => {
-                const pk = getPrimaryKeyName(columns);
-                if (!pk) return alert("Data not validated");
-
                 const newHashes = await Promise.all(
                   data.map(async (row) => {
-                    const salt = crypto.getRandomValues(new Uint8Array(16));
-                    const saltHex = Array.from(salt)
-                      .map((b) => b.toString(16).padStart(2, "0"))
-                      .join("");
-
-                    const rowWithSalt = { ...row, __salt: saltHex };
-                    const hash = await hashRow(rowWithSalt);
-
-                    return { [pk]: row[pk], hash, salt: saltHex };
+                    const hash = await hashRow(row);
+                    return { row, hash };
                   })
                 );
-
                 setHashes(newHashes);
               }}
             >
@@ -158,34 +141,43 @@ export default function DataTable() {
           <Alert variant="default" className="flex-1">
             <CheckCircle2Icon />
             <AlertDescription>
-              Only below data will be sent to the server. Rest will stay as
+              Only the hash will be sent to the blockchain. Original data stays
               private.
             </AlertDescription>
           </Alert>
           {hashes.map((row, i) => (
             <div key={i} className="p-2 min-w-auto border rounded-md text-xs">
               <pre className="mt-2 whitespace-pre-wrap break-words">
-                {JSON.stringify(row, null, 2)}
+                {JSON.stringify({ hash: row.hash }, null, 2)}
               </pre>
             </div>
           ))}
         </div>
       </TabsContent>
 
-      {/* Get QR */}
+      {/* Get Transaction Hashes & QR Codes */}
       <TabsContent value="get" className="flex flex-col px-4 lg:px-6">
         <div className="aspect-video w-full flex-1 rounded-lg border border-dashed p-4">
           <div className="flex gap-2">
             <Button
               onClick={async () => {
                 try {
-                  await fetch("/api/upload-hashes", {
+                  const rawHashes = hashes.map((item) => item.hash);
+                  const res = await fetch("/api/upload-hashes", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(hashes),
+                    body: JSON.stringify({ hashes: rawHashes }),
                   });
-                  alert("Hashes sent!");
-                  setSubmitted(true); // <-- Unlock download
+
+                  const txHashes: string[] = await res.json();
+                  const hashesWithTx = hashes.map((item, i) => ({
+                    ...item,
+                    txHash: txHashes[i],
+                  }));
+
+                  setHashes(hashesWithTx);
+                  setSubmitted(true);
+                  alert("Transaction hashes received and saved.");
                 } catch (err) {
                   console.error(err);
                   alert("Failed to send.");
@@ -206,19 +198,16 @@ export default function DataTable() {
           </div>
           <Alert variant="default" className="flex-1 mb-4">
             <CheckCircle2Icon />
-
             <AlertDescription>
-              Download available only after Data is sent to the server. After
-              that any scan attempts will be counted.
+              Download available only after successful submission to server.
             </AlertDescription>
           </Alert>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {hashes.map((row, i) => {
-              const pk = getPrimaryKeyName(columns);
-              if (!pk) return null;
-              const matched = data.find((d) => d[pk] === row[pk]);
-              const qrPayload = getRowForQR(matched, columns, pk);
-              const Verify = `www.seemo.com/verify/companyA/${row.hash}`;
+              if (!row.txHash) return null;
+
+              const qrPayload = getRowForQR(row.row, columns);
+              const Verify = `www.seemo.com/verify/companyA/${row.txHash}`;
 
               return (
                 <div
@@ -233,7 +222,7 @@ export default function DataTable() {
                     }}
                   />
                   <pre className="mt-2 text-black">
-                    {row.hash.slice(0, 12)}...
+                    {row.txHash.slice(0, 12)}...
                   </pre>
                 </div>
               );
