@@ -162,10 +162,10 @@ export default function DataTable() {
             <Button
               onClick={async () => {
                 try {
-                  const rawHashes = hashes.map((item) => item.hash);
-                  const res = await fetch("/api/upload-hashes", {
+                    const rawHashes = hashes.map((item) => item.hash);
+                    const res = await fetch("http://localhost:3000/api/upload-hashes", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json"},
                     body: JSON.stringify({ hashes: rawHashes }),
                   });
 
