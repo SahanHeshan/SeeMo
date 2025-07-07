@@ -163,33 +163,32 @@ const AppComponent1= () => {
             ></path>
           </g>
         </svg>
-        <div className="text-sm font-medium">Steps</div>
+        <div className="text-sm font-medium">For the Bussiness</div>
       </div>
       <div className="space-y-3">
         <div className="text-foreground border-b border-white/10 pb-3 text-sm font-medium">
-          This year, you're walking more on average than you did in 2023.
-        </div>
+          protect your brand, fight counterfeits, and meet rising consumer demands for accountability.        </div>
         <div className="space-y-3">
           <div className="space-y-1">
             <div className="space-x-1">
               <span className="text-foreground align-baseline text-xl font-medium">
-                8,081
+                Sales of products
               </span>
-              <span className="text-muted-foreground text-xs">Steps/day</span>
+              <span className="text-muted-foreground text-xs"></span>
             </div>
             <div className="flex h-5 items-center rounded bg-gradient-to-l from-emerald-400 to-indigo-600 px-2 text-xs text-white">
-              2024
+              In SeeMo
             </div>
           </div>
           <div className="space-y-1">
             <div className="space-x-1">
               <span className="text-foreground align-baseline text-xl font-medium">
-                5,412
+                sales of products
               </span>
-              <span className="text-muted-foreground text-xs">Steps/day</span>
+              <span className="text-muted-foreground text-xs"></span>
             </div>
             <div className="text-foreground bg-muted flex h-5 w-2/3 items-center rounded px-2 text-xs dark:bg-white/20">
-              2023
+              Not in SeeMo
             </div>
           </div>
         </div>
@@ -221,33 +220,32 @@ const AppComponent2= () => {
             ></path>
           </g>
         </svg>
-        <div className="text-sm font-medium">Steps</div>
+        <div className="text-sm font-medium">For the Clients</div>
       </div>
       <div className="space-y-3">
         <div className="text-foreground border-b border-white/10 pb-3 text-sm font-medium">
-          This year, you're walking more on average than you did in 2023.
-        </div>
+        Know the truth behind every product you purchase.        </div>
         <div className="space-y-3">
           <div className="space-y-1">
             <div className="space-x-1">
               <span className="text-foreground align-baseline text-xl font-medium">
-                8,081
+                Trust on products
               </span>
-              <span className="text-muted-foreground text-xs">Steps/day</span>
+              <span className="text-muted-foreground text-xs"></span>
             </div>
             <div className="flex h-5 items-center rounded bg-gradient-to-l from-emerald-400 to-indigo-600 px-2 text-xs text-white">
-              2024
+              In SeeMo
             </div>
           </div>
           <div className="space-y-1">
             <div className="space-x-1">
               <span className="text-foreground align-baseline text-xl font-medium">
-                5,412
+                Trust on products
               </span>
-              <span className="text-muted-foreground text-xs">Steps/day</span>
+              <span className="text-muted-foreground text-xs"></span>
             </div>
             <div className="text-foreground bg-muted flex h-5 w-2/3 items-center rounded px-2 text-xs dark:bg-white/20">
-              2023
+              Not in SeeMo
             </div>
           </div>
         </div>
