@@ -45,8 +45,8 @@ export default function IntegrationsSection() {
                             </div>
                         </div>
                         <div className="mx-auto mt-6 max-w-lg space-y-6 text-center sm:mt-0 sm:text-left">
-                            <h2 className="text-balance text-3xl font-semibold md:text-4xl">Integrate with your favorite tools</h2>
-                            <p className="text-muted-foreground">Connect seamlessly with popular platforms and services to enhance your workflow.</p>
+                            <h2 className="text-balance text-3xl font-semibold md:text-4xl">SeeMo has been developed with the help of these trusted tools.</h2>
+                            {/* <p className="text-muted-foreground">Connect seamlessly with popular platforms and services to enhance your workflow.</p> */}
 
                             <Button
                                 variant="outline"

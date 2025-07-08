@@ -1,26 +1,23 @@
-import { type SVGProps } from 'react'
+import { SVGProps } from 'react';
 
-export default function Replit(props: SVGProps<SVGSVGElement>) {
-    return (
-        <svg
-            width="1em"
-            height="1em"
-            viewBox="0 0 20 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            {...props}>
-            <path
-                d="M0 1.5C0 0.671573 0.671573 0 1.5 0H8.5C9.32843 0 10 0.671573 10 1.5V8H1.5C0.671573 8 0 7.32843 0 6.5V1.5Z"
-                fill="#F26207"
-            />
-            <path
-                d="M10 8H18.5C19.3284 8 20 8.67157 20 9.5V14.5C20 15.3284 19.3284 16 18.5 16H10V8Z"
-                fill="#F26207"
-            />
-            <path
-                d="M0 17.5C0 16.6716 0.671573 16 1.5 16H10V22.5C10 23.3284 9.32843 24 8.5 24H1.5C0.671573 24 0 23.3284 0 22.5V17.5Z"
-                fill="#F26207"
-            />
-        </svg>
-    )
+export default function LaceWalletLogo(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 160 160"
+      {...props}
+    >
+      <title>Lace Wallet</title>
+      <defs>
+        <linearGradient id="laceGradient" x1="80" y1="0" x2="80" y2="160" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#4E47F4" />
+          <stop offset="1" stopColor="#9159E5" />
+        </linearGradient>
+      </defs>
+      <circle cx="80" cy="80" r="80" fill="url(#laceGradient)" />
+      <path fill="#fff" d="M80 120l30-60H50l30 60z" />
+    </svg>
+  );
 }
