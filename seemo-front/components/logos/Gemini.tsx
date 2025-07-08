@@ -1,44 +1,17 @@
 import { type SVGProps } from 'react'
 
-export default function Gemini(props: SVGProps<SVGSVGElement>) {
-    return (
-        <svg
-            height="1em"
-            style={{
-                flex: 'none',
-                lineHeight: 1,
-            }}
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            width="1em"
-            {...props}>
-            <title>{'Gemini'}</title>
-            <defs>
-                <linearGradient
-                    id="lobe-icons-gemini-fill"
-                    x1="0%"
-                    x2="68.73%"
-                    y1="100%"
-                    y2="30.395%">
-                    <stop
-                        offset="0%"
-                        stopColor="#1C7DFF"
-                    />
-                    <stop
-                        offset="52.021%"
-                        stopColor="#1C69FF"
-                    />
-                    <stop
-                        offset="100%"
-                        stopColor="#F0DCD6"
-                    />
-                </linearGradient>
-            </defs>
-            <path
-                d="M12 24A14.304 14.304 0 000 12 14.304 14.304 0 0012 0a14.305 14.305 0 0012 12 14.305 14.305 0 00-12 12"
-                fill="url(#lobe-icons-gemini-fill)"
-                fillRule="nonzero"
-            />
-        </svg>
-    )
+export default function NextJs(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 128 128"
+      width="1em"
+      height="1em"
+      style={{ flex: 'none', lineHeight: 1 }}
+      {...props}
+    >
+      <title>{'Next.js'}</title>
+      <path d="M64 0C28.7 0 0 28.7 0 64s28.7 64 64 64c11.2 0 21.7-2.9 30.8-7.9L48.4 55.3v36.6h-6.8V41.8h6.8l50.5 75.8C116.4 106.2 128 86.5 128 64c0-35.3-28.7-64-64-64zm22.1 84.6l-7.5-11.3V41.8h7.5v42.8z" 
+        fill="currentColor" />
+    </svg>
+  )
 }
