@@ -213,14 +213,14 @@ export default function DataTable() {
                 product_hash: row.hash,
                 tx_hash: row.txHash,
               };
-
+              const qrLink = `http://localhost:3005/verify-product?product_hash=${row.hash}&tx_hash=${row.txHash}`;
               return (
                 <div
                   key={i}
                   className="flex flex-col items-center justify-center p-2 bg-white border rounded-md text-xs min-w-[120px]"
                 >
                   <QRCodeSVG
-                    value={JSON.stringify(qrPayload)}
+                    value={qrLink}
                     size={110}
                     ref={(el) => {
                       qrRefs.current[i] = el;

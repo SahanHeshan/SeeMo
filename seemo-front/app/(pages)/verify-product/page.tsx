@@ -1,13 +1,10 @@
+"use client";
+import { Suspense, useState } from "react";
 import type { Metadata } from "next";
-import CheckItem from "@/components/check-item";
+import CheckItem from "@/app/(pages)/verify-product/check-item";
 import { ResultList } from "@/app/(pages)/verify-product/result";
 import { Card } from "@/components/ui/card";
 import { AnimatedGroup } from "@/components/ui/animated-group";
-
-export const metadata: Metadata = {
-  title: "VerifyProduct",
-  description: "Verify Product",
-};
 
 const transitionVariants = {
   item: {
@@ -30,6 +27,10 @@ const transitionVariants = {
 };
 
 export default function VerifyProduct() {
+  const [result, setResult] = useState<{ status: string; type: string } | null>(
+    null
+  );
+
   return (
     <section className="py-24 md:py-4">
       <AnimatedGroup
@@ -50,12 +51,14 @@ export default function VerifyProduct() {
           <div className="flex flex-col lg:flex-row gap-6 w-full max-w-6xl px-4 py-8">
             <div className="w-full lg:w-1/2">
               <Card className="p-6">
-                <CheckItem />
+                <Suspense>
+                  <CheckItem onResult={setResult} />
+                </Suspense>
               </Card>
             </div>
             <div className="w-full lg:w-2/3">
-              <Card className="p-6 min-h-[422px]">
-                <ResultList />
+              <Card className="p-6 h-full">
+                <ResultList result={result} />
               </Card>
             </div>
           </div>
