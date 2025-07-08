@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Italic } from 'lucide-react'
 
 export default function Testimonials() {
     return (
@@ -49,7 +50,10 @@ Our blockchain-based verification platform empowers you to instantly check the a
                     <Card className="md:col-span-2">
                         <CardContent className="h-full pt-6">
                             <blockquote className="grid h-full grid-rows-[1fr_auto] gap-6">
-                                {/* <p className="text-xl font-medium">Tailus is really extraordinary and very practical, no need to break your head. A real gold mine.</p> */}
+                                
+                                <p className="text-xl font-medium">Mission</p>
+                                  <p> Empowering trust through blockchain technology by providing a secure, transparent, and Cardano-based product verification platform that protects consumers and brands alike.
+                                </p>
 
                                 {/* <div className="grid grid-cols-[auto_1fr] items-center gap-3">
                                     <Avatar className="size-12">
@@ -73,7 +77,9 @@ Our blockchain-based verification platform empowers you to instantly check the a
                     <Card>
                         <CardContent className="h-full pt-6">
                             <blockquote className="grid h-full grid-rows-[1fr_auto] gap-6">
-                                <p></p>
+                                <p className="text-xl font-medium">Vision</p>
+                                  <p> To create a world where every product tells its true story. With a simple QR scan, users can verify authenticity, trace origin, and ensure ethical sourcing—ushering in a new era of smart, transparent, and responsible shopping.
+                                </p>
 
                                 {/* <div className="grid items-center gap-3 [grid-template-columns:auto_1fr]">
                                     <Avatar className="size-12">
@@ -97,7 +103,7 @@ Our blockchain-based verification platform empowers you to instantly check the a
                     <Card className="card variant-mixed">
                         <CardContent className="h-full pt-6">
                             <blockquote className="grid h-full grid-rows-[1fr_auto] gap-6">
-                                {/* <p>Great work on tailfolio template. This is one of the best personal website that I have seen so far!</p> */}
+                                <p>"Trust isn’t given—it’s verified. Powered by Cardano."</p>
 
                                 {/* <div className="grid grid-cols-[auto_1fr] gap-3">
                                     <Avatar className="size-12">
