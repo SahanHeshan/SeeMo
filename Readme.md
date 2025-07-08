@@ -65,6 +65,10 @@ SeeMo leverages the **Cardano** blockchain and integrates with the **Lace Wallet
 
 ---
 
+![Diagram](https://github.com/user-attachments/assets/72755d5c-d649-4dbd-8307-94d146935a81)
+
+
+
 ## 🛠 Technical Setup Guide
 
 To set up and run SeeMo locally, follow these steps carefully.
