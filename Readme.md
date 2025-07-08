@@ -78,7 +78,7 @@ To set up and run SeeMo locally, follow these steps carefully.
 ### ⚙️ Environment Variables
 
 > ⚠️ **Important:**  
-> You must create a `.env` file in **each folder** based on the provided `.env.example`.  
+> You must create a `.env` file in root based on the provided `.env.example`.  
 > Fill in the required credentials such as API keys, endpoints, ports, etc. **The app will not work without proper `.env` setup.**
 
 ---
@@ -96,25 +96,25 @@ npm install
 
 cd ../backend
 npm install
-
+````     
 
 2. Run the applications
 
-```Frontend
-
+Frontend
+````
 cd seemo-front
 npm run dev     # For development
 # OR
 npm run build && npm start   # For production
+````
 
-
-```Tool (CSV + Hash)
-
+Tool (CSV + Hash)
+````
 cd ../seemo-tool
 npm run dev
-
-```Backend API
-
+````
+Backend API
+````
 cd ../backend
 node server.mjs
 ````
