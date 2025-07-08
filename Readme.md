@@ -1,6 +1,7 @@
 # SeeMo: Product Verification Blockchain Platform
 
 ## Demo: [Link](https://drive.google.com/drive/folders/1jraL_NVVroqVSymTDh8dgAA_e2WvYYpy?usp=sharing)
+also includes a csv file for testing out
 
 ## 1. Solution Overview
 
