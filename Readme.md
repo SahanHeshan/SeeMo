@@ -1,6 +1,6 @@
 # SeeMo: Product Verification Blockchain Platform
 
-## Demo: Link
+## Demo: [Link](https://drive.google.com/drive/folders/1jraL_NVVroqVSymTDh8dgAA_e2WvYYpy?usp=sharing)
 
 ## 1. Solution Overview
 
@@ -56,7 +56,7 @@ SeeMo leverages the **Cardano** blockchain and integrates with the **Lace Wallet
 
 ---
 
-## ✅ Key Benefits
+## Key Benefits
 
 - **No sensitive product data ever leaves the company’s systems**
 - **Tamper-proof and publicly verifiable QR codes**
@@ -75,15 +75,15 @@ To set up and run SeeMo locally, follow these steps carefully.
 - `seemo-tool` – Company-side CSV upload + hash generation tool
 - `backend` – API server for handling hash submission and lookup
 
-### ⚙️ Environment Variables
+### Environment Variables
 
 > ⚠️ **Important:**  
-> You must create a `.env` file in root based on the provided `.env.example`.  
+> You must create a `.env` files in the backend folder and seemo-front based on the provided `.env.example`.  
 > Fill in the required credentials such as API keys, endpoints, ports, etc. **The app will not work without proper `.env` setup.**
 
 ---
 
-### 🚀 Step-by-Step Setup
+### Step-by-Step Setup
 
 1. **Install dependencies**
 
