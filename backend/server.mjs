@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import geoip from "geoip-lite";
 import express from "express";
 import path from "path";
 import bodyParser from "body-parser";
@@ -113,25 +114,24 @@ app.post("/api/lookup/:txHash", async (req, res) => {
             return res.status(400).json({ status: "error", type: "missing_product_hash" });
         }
 
-        //console.log("🔎 Verifying product hash:", product_hash, "in tx:", txHash);
-
         const response = await fetch(
             BLOCKFROST_URL + `/txs/${txHash}/metadata`,
             {
-                headers: {
-                    project_id: blockfrostKey
-                }
+                headers: { project_id: blockfrostKey }
             }
         );
 
         if (!response.ok) {
             const text = await response.text();
             console.error("❌ Blockfrost error:", text);
-            return res.status(response.status).json({ status: "error", type: "blockfrost_failure", error: text });
+            return res.status(response.status).json({
+                status: "error",
+                type: "blockfrost_failure",
+                error: text
+            });
         }
 
         const metadataArray = await response.json();
-
         const labelEntry = metadataArray.find(item => item.label === "1234");
 
         if (!labelEntry || !labelEntry.json_metadata) {
@@ -145,9 +145,53 @@ app.post("/api/lookup/:txHash", async (req, res) => {
         );
 
         if (found) {
-            return res.json({ status: "verified", type: "match" });
+            const db = client.db("product_auth");
+            const verifications = db.collection("verifications");
+
+            const now = new Date();
+            const date = now.toISOString().split("T")[0]; // YYYY-MM-DD
+            const time = now.toTimeString().split(" ")[0].slice(0, 5); // HH:MM (24h format)
+
+            // Get IP and geolocation
+            const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+            const geo = geoip.lookup(ip);
+            const location = geo ? `${geo.city || "Unknown"}, ${geo.country}` : "Unknown";
+
+            let record = await verifications.findOne({ product_hash });
+
+            const attempt = record ? record.verifications.length + 1 : 1;
+
+            const newEntry = {
+                attempt,
+                date,
+                time,
+                location
+            };
+
+            if (record) {
+                await verifications.updateOne(
+                    { product_hash },
+                    { $push: { verifications: newEntry } }
+                );
+            } else {
+                await verifications.insertOne({
+                    product_hash,
+                    verifications: [newEntry]
+                });
+            }
+
+            return res.json({
+                status: "verified",
+                type: "match",
+                history: record ? [...record.verifications, newEntry] : [newEntry]
+            });
+
         } else {
-            return res.json({ status: "not_found", type: "mismatch" });
+            return res.json({
+                status: "not_found",
+                type: "mismatch",
+                history: []
+            });
         }
 
     } catch (err) {
@@ -156,20 +200,12 @@ app.post("/api/lookup/:txHash", async (req, res) => {
     }
 });
 
-
-
 //sensitive
 const PORT = process.env.PORT || 3000;
 async function startServer() {
     try {
         await client.connect();
         console.log("✅ Connected to MongoDB cluster.");
-
-// Try listing databases
-        const adminDb = client.db().admin();
-        const databases = await adminDb.listDatabases();
-        console.log("✅ Databases found:", databases.databases.map(db => db.name));
-
 
         app.listen(PORT, () => {
             console.log(`✅ Server running on http://localhost:${PORT}`);
