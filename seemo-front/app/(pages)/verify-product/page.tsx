@@ -1,6 +1,5 @@
 "use client";
-import { Suspense, useState } from "react";
-// import type { Metadata } from "next";
+import { Suspense, useState, useRef, useEffect } from "react";
 import CheckItem from "@/app/(pages)/verify-product/check-item";
 import { ResultList } from "@/app/(pages)/verify-product/result";
 import { Card } from "@/components/ui/card";
@@ -38,6 +37,14 @@ export default function VerifyProduct() {
     }[];
   } | null>(null);
 
+  const resultRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (result && resultRef.current) {
+      resultRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [result]);
+
   return (
     <section className="py-24 md:py-4">
       <AnimatedGroup
@@ -63,7 +70,7 @@ export default function VerifyProduct() {
                 </Suspense>
               </Card>
             </div>
-            <div className="w-full lg:w-2/3">
+            <div className="w-full lg:w-2/3" ref={resultRef}>
               <Card className="p-6 h-full">
                 <ResultList result={result} />
               </Card>
