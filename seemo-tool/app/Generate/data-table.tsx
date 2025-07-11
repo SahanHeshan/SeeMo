@@ -14,6 +14,7 @@ import { z } from "zod";
 import { CheckCircle2Icon } from "lucide-react";
 
 const SERVER_API = process.env.NEXT_PUBLIC_SERVER_API;
+const QR_URL = process.env.NEXT_PUBLIC_QR_URL;
 
 type FieldType = "string" | "number" | "boolean";
 
@@ -213,7 +214,7 @@ export default function DataTable() {
                 tx_hash: row.txHash,
               };
               const qrLink =
-                SERVER_API +
+                QR_URL +
                 `/verify-product?product_hash=${row.hash}&tx_hash=${row.txHash}`;
               return (
                 <div
