@@ -111,7 +111,7 @@ app.post("/api/lookup/:txHash", async (req, res) => {
         const { product_hash } = req.body;
 
         if (!product_hash) {
-            return res.status(400).json({ status: "Invalid", type: "Invalid Unique Code" });
+            return res.status(400).json({ status: "Error", type: "Incomplete Inputs" });
         }
 
         const response = await fetch(
@@ -123,7 +123,7 @@ app.post("/api/lookup/:txHash", async (req, res) => {
 
         if (!response.ok) {
             const text = await response.text();
-            console.error("❌ Blockfrost error:", text);
+            //console.error("❌ Blockfrost error:", text);
             return res.status(response.status).json({
                 status: "Invalid",
                 type: "Invalid Unique Code",
@@ -135,7 +135,7 @@ app.post("/api/lookup/:txHash", async (req, res) => {
         const labelEntry = metadataArray.find(item => item.label === "1234");
 
         if (!labelEntry || !labelEntry.json_metadata) {
-            return res.status(404).json({ status: "error", type: "label_not_found" });
+            return res.status(404).json({ status: "Invalid", type: "Unique code not found" });
         }
 
         const hashesBlock = labelEntry.json_metadata;
@@ -195,8 +195,8 @@ app.post("/api/lookup/:txHash", async (req, res) => {
         }
 
     } catch (err) {
-        console.error("❌ Lookup error:", err);
-        res.status(500).json({ status: "Not Found", type: "Error", error: err.message });
+        //console.error("❌ Lookup error:", err);
+        res.status(500).json({ status: "Error", type: "Not found", error: err.message });
     }
 });
 
