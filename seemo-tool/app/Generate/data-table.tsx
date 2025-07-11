@@ -8,12 +8,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { downloadQRCodesFromRefs } from "@/lib/downloadQR";
 import { useRef } from "react";
+import { Loader2 } from "lucide-react"; // Spinner icon from lucide-react (or use any)
 
 import { QRCodeSVG } from "qrcode.react";
 import { z } from "zod";
 import { CheckCircle2Icon } from "lucide-react";
 
 const SERVER_API = process.env.NEXT_PUBLIC_SERVER_API;
+
 const QR_URL = process.env.NEXT_PUBLIC_QR_URL;
 
 type FieldType = "string" | "number" | "boolean";
@@ -41,12 +43,18 @@ async function hashRow(row: object): Promise<string> {
 }
 
 export default function DataTable() {
+  const [alertMessage, setAlertMessage] = React.useState<string | null>(null);
+  const [alertVariant, setAlertVariant] = React.useState<
+    "default" | "destructive"
+  >("default");
+
   const [submitted, setSubmitted] = React.useState(false);
   const qrRefs = useRef<(SVGSVGElement | null)[]>([]);
   const [columns, setColumns] = React.useState<ColumnPreview[]>([]);
   const [previewData, setPreviewData] = React.useState<any[]>([]);
   const [schema, setSchema] = React.useState<z.ZodObject<any>>(); // For schema validation
   const [data, setData] = React.useState<any[]>([]); // Validated rows
+  const [loading, setLoading] = React.useState(false);
   const [hashes, setHashes] = React.useState<
     { row: any; hash: string; txHash?: string }[]
   >([]);
@@ -78,6 +86,41 @@ export default function DataTable() {
 
     setData(validated as any[]);
   };
+
+  async function handleSubmit(e?: React.FormEvent) {
+    if (e) e.preventDefault();
+    setLoading(true);
+
+    try {
+      const rawHashes = hashes.map((item) => item.hash);
+
+      const res = await fetch(SERVER_API + "/api/upload-hashes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ hashes: rawHashes }),
+      });
+
+      const txHash: string = await res.json();
+
+      const hashesWithTx = hashes.map((item) => ({
+        ...item,
+        txHash,
+      }));
+
+      setHashes(hashesWithTx);
+      setSubmitted(true);
+      setAlertMessage(
+        "✅ Submission successful. You can now download QR codes."
+      );
+      setAlertVariant("default");
+    } catch (err) {
+      console.error(err);
+      setAlertMessage("❌ Failed to submit data. Please try again.");
+      setAlertVariant("destructive");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <Tabs defaultValue="load" className="w-full flex-col gap-6">
@@ -159,36 +202,21 @@ export default function DataTable() {
       </TabsContent>
 
       {/* Get Transaction Hashes & QR Codes */}
+
       <TabsContent value="get" className="flex flex-col px-4 lg:px-6">
         <div className="aspect-video w-full flex-1 rounded-lg border border-dashed p-4">
           <div className="flex gap-2">
             <Button
-              onClick={async () => {
-                try {
-                  const rawHashes = hashes.map((item) => item.hash);
-                  const res = await fetch(SERVER_API + "/api/upload-hashes", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ hashes: rawHashes }),
-                  });
-
-                  const txHash: string = await res.json(); // Single tx hash returned
-                  const hashesWithTx = hashes.map((item) => ({
-                    ...item,
-                    txHash,
-                  }));
-
-                  setHashes(hashesWithTx);
-                  setSubmitted(true);
-                  alert("Transaction hashes received and saved.");
-                } catch (err) {
-                  console.error(err);
-                  alert("Failed to send.");
-                }
-              }}
-              disabled={hashes.length === 0}
+              disabled={loading || hashes.length === 0}
+              onClick={handleSubmit}
             >
-              Send Data to Server
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...
+                </>
+              ) : (
+                "Send Data to Server"
+              )}
             </Button>
 
             <Button
