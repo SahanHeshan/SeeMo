@@ -13,6 +13,8 @@ import { QRCodeSVG } from "qrcode.react";
 import { z } from "zod";
 import { CheckCircle2Icon } from "lucide-react";
 
+const SERVER_API = process.env.NEXT_PUBLIC_SERVER_API;
+
 type FieldType = "string" | "number" | "boolean";
 
 type ColumnPreview = {
@@ -163,18 +165,14 @@ export default function DataTable() {
               onClick={async () => {
                 try {
                   const rawHashes = hashes.map((item) => item.hash);
-                  const res = await fetch(
-                    "http://localhost:3000/api/upload-hashes",
-                    {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ hashes: rawHashes }),
-                    }
-                  );
+                  const res = await fetch(SERVER_API + "/api/upload-hashes", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ hashes: rawHashes }),
+                  });
 
                   const txHash: string = await res.json(); // Single tx hash returned
                   const hashesWithTx = hashes.map((item) => ({
-
                     ...item,
                     txHash,
                   }));
@@ -214,7 +212,9 @@ export default function DataTable() {
                 product_hash: row.hash,
                 tx_hash: row.txHash,
               };
-              const qrLink = `http://localhost:3005/verify-product?product_hash=${row.hash}&tx_hash=${row.txHash}`;
+              const qrLink =
+                SERVER_API +
+                `/verify-product?product_hash=${row.hash}&tx_hash=${row.txHash}`;
               return (
                 <div
                   key={i}

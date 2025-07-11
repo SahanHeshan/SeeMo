@@ -27,7 +27,6 @@ export function SelectBrand({
         <SelectGroup>
           <SelectLabel>Available Brands</SelectLabel>
           <SelectItem value="companyA">Company A</SelectItem>
-          <SelectItem value="companyB">Company B</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

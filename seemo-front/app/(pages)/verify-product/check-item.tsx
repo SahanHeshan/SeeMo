@@ -8,19 +8,26 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { SelectBrand } from "@/components/selectBrand";
 
+const SERVER_API = process.env.NEXT_PUBLIC_SERVER_API;
 export default function CheckItem({
   onResult,
 }: {
-  onResult: (res: { status: string; type: string }) => void;
+  onResult: (res: {
+    status: string;
+    type: string;
+    history: {
+      attempt: number;
+      date: string;
+      time: string;
+      location: string;
+    }[];
+  }) => void;
 }) {
   const searchParams = useSearchParams();
 
   const [productHash, setProductHash] = useState("");
   const [txHash, setTxHash] = useState("");
   const [brand, setBrand] = useState("");
-  const [result, setResult] = useState<{ status: string; type: string } | null>(
-    null
-  );
 
   useEffect(() => {
     const hashFromURL = searchParams.get("product_hash") || "";
@@ -33,7 +40,7 @@ export default function CheckItem({
     e.preventDefault();
 
     try {
-      const res = await fetch(`http://localhost:3000/api/lookup/${txHash}`, {
+      const res = await fetch(SERVER_API + `/api/lookup/${txHash}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -45,7 +52,7 @@ export default function CheckItem({
       onResult(json); // 👈 send result to parent
     } catch (err) {
       console.error(err);
-      onResult({ status: "error", type: "unknown" });
+      onResult({ status: "error", type: "unknown", history: [] }); // 👈 send error result to parent
     }
   }
 
@@ -71,7 +78,7 @@ export default function CheckItem({
         <div className="my-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
           <hr className="border-dashed" />
           <span className="text-muted-foreground text-xs">
-            2. Enter the Product Code
+            2. Enter the First Product Code
           </span>
           <hr className="border-dashed" />
         </div>
@@ -95,7 +102,7 @@ export default function CheckItem({
         <div className="my-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
           <hr className="border-dashed" />
           <span className="text-muted-foreground text-xs">
-            3. Enter the Transaction Hash
+            3. Enter the Second Product Code
           </span>
           <hr className="border-dashed" />
         </div>
@@ -116,7 +123,7 @@ export default function CheckItem({
           </div>
 
           <Button className="w-full" type="submit">
-            Continue
+            Verify
           </Button>
         </div>
       </div>

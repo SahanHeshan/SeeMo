@@ -111,7 +111,7 @@ app.post("/api/lookup/:txHash", async (req, res) => {
         const { product_hash } = req.body;
 
         if (!product_hash) {
-            return res.status(400).json({ status: "error", type: "missing_product_hash" });
+            return res.status(400).json({ status: "Invalid", type: "Invalid Unique Code" });
         }
 
         const response = await fetch(
@@ -125,8 +125,8 @@ app.post("/api/lookup/:txHash", async (req, res) => {
             const text = await response.text();
             console.error("❌ Blockfrost error:", text);
             return res.status(response.status).json({
-                status: "error",
-                type: "blockfrost_failure",
+                status: "Invalid",
+                type: "Invalid Unique Code",
                 error: text
             });
         }
@@ -181,22 +181,22 @@ app.post("/api/lookup/:txHash", async (req, res) => {
             }
 
             return res.json({
-                status: "verified",
-                type: "match",
+                status: "Verified",
+                type: "Match",
                 history: record ? [...record.verifications, newEntry] : [newEntry]
             });
 
         } else {
             return res.json({
-                status: "not_found",
-                type: "mismatch",
+                status: "Item not found",
+                type: "Mismatch",
                 history: []
             });
         }
 
     } catch (err) {
         console.error("❌ Lookup error:", err);
-        res.status(500).json({ status: "error", type: "server_error", error: err.message });
+        res.status(500).json({ status: "Not Found", type: "Error", error: err.message });
     }
 });
 

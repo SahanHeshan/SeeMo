@@ -2,28 +2,28 @@ import Link from "next/link";
 
 const links = [
   {
-    title: "Features",
-    href: "#",
+    title: "Home",
+    href: "/",
   },
   {
-    title: "Solution",
-    href: "#",
+    title: "Verify Product",
+    href: "/verify-product",
   },
   {
     title: "Customers",
-    href: "#",
+    href: "/solution",
   },
   {
     title: "Pricing",
-    href: "#",
+    href: "/solution",
   },
   {
     title: "Help",
-    href: "#",
+    href: "/about",
   },
   {
     title: "About",
-    href: "#",
+    href: "/about",
   },
 ];
 

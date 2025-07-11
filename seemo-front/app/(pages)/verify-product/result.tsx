@@ -1,12 +1,27 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2Icon, AlertCircleIcon, InfoIcon } from "lucide-react";
-
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 export function ResultList({
   result,
 }: {
-  result: { status: string;
+  result: {
+    status: string;
     type: string;
-    history:{attempt: number; date: string; time: string; location: string}[]; } | null;
+    history: {
+      attempt: number;
+      date: string;
+      time: string;
+      location: string;
+    }[];
+  } | null;
 }) {
   if (!result) {
     return (
@@ -14,10 +29,10 @@ export function ResultList({
         variant="default"
         className="mb-4 text-center flex flex-col items-center bg-accent text-yellow-800"
       >
-        <InfoIcon className="w-10 h-10 mb-2" />
+        <InfoIcon className="!w-24 !h-24 mb-6" />
         <AlertTitle className="text-xl font-bold">No Scan Yet</AlertTitle>
         <AlertDescription>
-          Scan a QR or enter a hash to get started.
+          Scan a QR or enter the Unique codes to get started.
         </AlertDescription>
       </Alert>
     );
@@ -29,7 +44,7 @@ export function ResultList({
   return (
     <Alert
       variant="default"
-      className={`mb-4 text-center flex flex-col items-center ${
+      className={` mb-4 text-center flex flex-col items-center ${
         isValid
           ? "bg-accent text-green-800"
           : isInvalid
@@ -37,20 +52,24 @@ export function ResultList({
           : "bg-accent text-yellow-800"
       }`}
     >
-      {isValid ? (
-        <CheckCircle2Icon className="w-50 h-50 mb-2" />
+      {isValid && result.history.length > 1 ? (
+        <AlertCircleIcon className="!w-24 !h-24 mb-6 text-red-700" />
+      ) : isValid ? (
+        <CheckCircle2Icon className="!w-24 !h-24 mb-6 text-green-700" />
       ) : isInvalid ? (
-        <AlertCircleIcon className="w-50 h-50 mb-2" />
+        <AlertCircleIcon className="!w-24 !h-24 mb-6 text-red-700" />
       ) : (
-        <InfoIcon className="w-50 h-50 mb-2" />
+        <InfoIcon className="!w-24 !h-24 mb-6 text-yellow-700" />
       )}
 
       <AlertTitle className="text-xl font-bold">
-        {isValid
-          ? "Valid Transaction"
+        {isValid && result.history.length > 1
+          ? "Suspicious: Too Many Scans"
+          : isValid
+          ? "Genuine Product"
           : isInvalid
-          ? "Invalid Transaction"
-          : "Unverified"}
+          ? "Invalid Codes"
+          : "Unverified Product"}
       </AlertTitle>
 
       <AlertDescription className="mt-1">
@@ -60,31 +79,45 @@ export function ResultList({
         <br />
       </AlertDescription>
 
-      {result.history.length > 0 && (
-          <div className="mt-4 w-full overflow-x-auto">
-            <table className="w-full text-sm text-left border border-gray-300 rounded-lg bg-white text-black">
-              <thead className="bg-gray-100 text-xs uppercase font-medium">
-              <tr>
-                <th className="px-4 py-2">Attempt</th>
-                <th className="px-4 py-2">Date</th>
-                <th className="px-4 py-2">Time</th>
-                <th className="px-4 py-2">Location</th>
-              </tr>
-              </thead>
-              <tbody>
-              {result.history.map((entry, index) => (
-                  <tr key={index} className="border-t">
-                    <td className="px-4 py-2">{entry.attempt}</td>
-                    <td className="px-4 py-2">{entry.date}</td>
-                    <td className="px-4 py-2">{entry.time}</td>
-                    <td className="px-4 py-2">{entry.location}</td>
-                  </tr>
-              ))}
-              </tbody>
-            </table>
-          </div>
-      )}
+      {Array.isArray(result.history) && result.history.length > 0 && (
+        <div>
+          <Table className="text-secondary-foreground">
+            <TableCaption>
+              Too many attempts may indicate a counterfit product.
+            </TableCaption>
 
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[50px]">Attempt</TableHead>
+                <TableHead className="w-[150px] text-center">Date</TableHead>
+                <TableHead>Time</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {result.history.map((entry, index) => {
+                const isLast = index === result.history.length - 1;
+                return (
+                  <TableRow
+                    key={index}
+                    className={
+                      isLast
+                        ? "bg-primary text-black  hover:text-secondary-foreground"
+                        : ""
+                    }
+                  >
+                    <TableCell className="font-medium text-left">
+                      {entry.attempt}
+                    </TableCell>
+                    <TableCell>{entry.date}</TableCell>
+                    <TableCell>{entry.time}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </Alert>
   );
 }

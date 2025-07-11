@@ -46,6 +46,13 @@ export default function AboutsPage() {
       >
         <Team />
       </AnimatedGroup>
+
+      <div className="pb-12 text-center">
+        <p className="text-muted-foreground">
+          &copy; {new Date().getFullYear()} SeeMo. Build for the UniHack
+          Inter-university Hackathon.
+        </p>
+      </div>
     </>
   );
 }
