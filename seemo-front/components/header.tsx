@@ -42,6 +42,7 @@ export const HeroHeader = () => {
             <div className="flex w-full justify-between lg:w-auto">
               <Link
                 href="/"
+                onClick={() => setMenuState(false)}
                 aria-label="home"
                 className="flex items-center space-x-2"
               >
@@ -63,6 +64,7 @@ export const HeroHeader = () => {
                 {menuItems.map((item, index) => (
                   <li key={index}>
                     <Link
+                      onClick={() => setMenuState(false)}
                       href={item.href}
                       className="text-muted-foreground hover:text-accent-foreground block duration-150"
                     >
@@ -79,6 +81,7 @@ export const HeroHeader = () => {
                   {menuItems.map((item, index) => (
                     <li key={index}>
                       <Link
+                        onClick={() => setMenuState(false)}
                         href={item.href}
                         className="text-muted-foreground hover:text-accent-foreground block duration-150"
                       >
